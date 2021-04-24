@@ -1,10 +1,12 @@
 package hu.pte.ttk.vaadin.vaadindemo.core.service.impl;
 
+import hu.pte.ttk.vaadin.vaadindemo.car.entity.CarEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.entity.CoreEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.service.CoreCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CoreCRUDServiceImpl<T extends CoreEntity> implements CoreCRUDService<T> {

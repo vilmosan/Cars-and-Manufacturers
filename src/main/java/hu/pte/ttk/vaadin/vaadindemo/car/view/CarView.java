@@ -5,12 +5,14 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import hu.pte.ttk.vaadin.vaadindemo.brand.entity.BrandEntity;
 import hu.pte.ttk.vaadin.vaadindemo.brand.service.BrandService;
@@ -31,8 +33,10 @@ public class CarView extends VerticalLayout {
 	private TextField carName;
 	private ComboBox<BrandEntity> brand;
 	private TextField carType;
-	private NumberField carDoors;
+	private ListBox<Integer> carDoors;
 	private NumberField carManufactured;
+
+	private TextField filterNameField = new TextField();
 
 	@Autowired
 	public CarService carService;
@@ -53,16 +57,32 @@ public class CarView extends VerticalLayout {
 		grid.addColumn(CarEntity::getCarDoors).setHeader("Doors");
 		grid.addColumn(CarEntity::getCarManufactured).setHeader("Manufactured");
 		grid.setItems(carService.getAll());
+
+		configureFilter(grid);
+
 		grid.asSingleSelect().addValueChangeListener(event -> {
 			selectedCar = event.getValue();
 			binder.setBean(selectedCar);
 			form.setVisible(selectedCar != null);
 			deleteButton.setEnabled(selectedCar != null);
 		});
-
 		addButtonBar(grid);
-		add(grid);
+		add(filterNameField, grid);
 		addForm(grid);
+	}
+
+	private void configureFilter(Grid<CarEntity> grid) {
+		filterNameField.setPlaceholder("Filter by name...");
+		filterNameField.setClearButtonVisible(true);
+		filterNameField.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+		filterNameField.addValueChangeListener(e -> {
+					if (filterNameField.getValue().isEmpty()) {
+						grid.setItems(carService.getAll());
+					} else {
+						grid.setItems(carService.findAllByName(filterNameField.getValue()));
+					}
+				}
+		);
 	}
 
 	private void addForm(Grid<CarEntity> grid) {
@@ -86,7 +106,8 @@ public class CarView extends VerticalLayout {
 		typeField.setPadding(true);
 
 		HorizontalLayout doorsField = new HorizontalLayout();
-		carDoors = new NumberField();
+		carDoors = new ListBox<>();
+		carDoors.setItems(2, 3, 4, 5);
 		doorsField.add(new Text("Doors:"), carDoors);
 		doorsField.setPadding(true);
 
@@ -128,27 +149,42 @@ public class CarView extends VerticalLayout {
 
 	private Button addSaveButton(Grid<CarEntity> grid) {
 		Button saveButton = new Button("Save", VaadinIcon.SAFE.create());
-		saveButton.addClickListener(buttonClickEvent -> {
-			if (selectedCar.getId() == null) {
-				CarEntity carEntity = new CarEntity();
-				carEntity.setCarName(selectedCar.getCarName());
-				carEntity.setBrand(selectedCar.getBrand());
-				carEntity.setCarType(selectedCar.getCarType());
-				carEntity.setCarDoors(selectedCar.getCarDoors());
-				carEntity.setCarManufactured(selectedCar.getCarManufactured());
 
-				carService.add(carEntity);
-				grid.setItems(carService.getAll());
-				selectedCar = null;
-				Notification.show("Saved.");
+		saveButton.addClickListener(buttonClickEvent -> {
+			boolean paramsNotNull = isParamsNotNull(selectedCar);
+
+			if (paramsNotNull) {
+				if (selectedCar.getId() == null) {
+					CarEntity carEntity = new CarEntity();
+					carEntity.setCarName(selectedCar.getCarName());
+					carEntity.setBrand(selectedCar.getBrand());
+					carEntity.setCarType(selectedCar.getCarType());
+					carEntity.setCarDoors(selectedCar.getCarDoors());
+					carEntity.setCarManufactured(selectedCar.getCarManufactured());
+
+					carService.add(carEntity);
+					grid.setItems(carService.getAll());
+					selectedCar = null;
+					Notification.show("Saved.");
+				} else {
+					carService.update(selectedCar);
+					grid.setItems(carService.getAll());
+					Notification.show("Modified.");
+				}
+				form.setVisible(false);
 			} else {
-				carService.update(selectedCar);
-				grid.setItems(carService.getAll());
-				Notification.show("Modified.");
+				Notification.show("Some input parameters are empty. Please fill all the fields!");
 			}
-			form.setVisible(false);
 		});
 		return saveButton;
+	}
+
+	private boolean isParamsNotNull(CarEntity selectedCar) {
+		if (selectedCar.getCarName().equals("") || selectedCar.getBrand().equals("") || selectedCar.getCarType().equals("") || selectedCar.getCarDoors().equals("") || selectedCar.getCarManufactured().equals("")) {
+			return false;
+		}
+
+		return true;
 	}
 
 }

@@ -15,11 +15,6 @@ import javax.persistence.*;
 @Entity
 public class CarEntity extends CoreEntity {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "car_id")
-//    private Long carId;
-
 	@Column(name = "car_name")
 	private String carName;
 
@@ -31,7 +26,7 @@ public class CarEntity extends CoreEntity {
 	private String carType;
 
 	@Column(name = "car_doors")
-	private Double carDoors;
+	private Integer carDoors;
 
 	@Column(name = "car_manufactured")
 	private Double carManufactured;
