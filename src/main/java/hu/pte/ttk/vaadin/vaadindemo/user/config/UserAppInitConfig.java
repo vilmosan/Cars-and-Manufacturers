@@ -15,30 +15,30 @@ import java.util.List;
 @Configuration
 public class UserAppInitConfig {
 
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private RoleService roleService;
+	@Autowired
+	private UserService userService;
 
-    @PostConstruct
-    private void init() {
-        List<RoleEntity> roleEntities = roleService.getAll();
-        RoleEntity admin = new RoleEntity();
-        if (roleEntities.isEmpty()) {
-            admin.setAuthority("ROLE_ADMIN");
-            roleService.add(admin);
+	@PostConstruct
+	private void init() {
+		List<RoleEntity> roleEntities = roleService.getAll();
+		RoleEntity admin = new RoleEntity();
+		if (roleEntities.isEmpty()) {
+			admin.setAuthority("ROLE_ADMIN");
+			roleService.add(admin);
 
-        }
+		}
 
-        List<UserEntity> userEntities = userService.getAll();
-        if (userEntities.isEmpty()) {
-            UserEntity entity = new UserEntity();
-            entity.setPassword(new BCryptPasswordEncoder().encode("ptettk2021"));
-            entity.setUsername("vaadmin");
-            entity.setAuthorities(new ArrayList<>());
-            entity.getAuthorities().add(admin);
-            userService.add(entity);
+		List<UserEntity> userEntities = userService.getAll();
+		if (userEntities.isEmpty()) {
+			UserEntity entity = new UserEntity();
+			entity.setPassword(new BCryptPasswordEncoder().encode("ptettk2021"));
+			entity.setUsername("vaadmin");
+			entity.setAuthorities(new ArrayList<>());
+			entity.getAuthorities().add(admin);
+			userService.add(entity);
 
-        }
-    }
+		}
+	}
 }

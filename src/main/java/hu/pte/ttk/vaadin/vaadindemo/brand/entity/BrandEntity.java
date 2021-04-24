@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "brand")
@@ -19,7 +21,7 @@ public class BrandEntity extends CoreEntity {
 //    @Column(name = "brand_id")
 //    private Long brandId;
 
-    @Column(name = "brand_name")
-    private String brandName;
+	@Column(name = "brand_name")
+	private String brandName;
 
 }

@@ -20,20 +20,20 @@ public class CarEntity extends CoreEntity {
 //    @Column(name = "car_id")
 //    private Long carId;
 
-    @Column(name = "car_name")
-    private String carName;
+	@Column(name = "car_name")
+	private String carName;
 
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private BrandEntity brand;
+	@ManyToOne
+	@JoinColumn(name = "brand_id")
+	private BrandEntity brand;
 
-    @Column(name = "car_type")
-    private String carType;
+	@Column(name = "car_type")
+	private String carType;
 
-    @Column(name = "car_doors")
-    private Double carDoors;
+	@Column(name = "car_doors")
+	private Double carDoors;
 
-    @Column(name = "car_manufactured")
-    private Double carManufactured;
+	@Column(name = "car_manufactured")
+	private Double carManufactured;
 
 }

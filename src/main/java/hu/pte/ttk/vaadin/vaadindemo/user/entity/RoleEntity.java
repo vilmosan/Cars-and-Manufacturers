@@ -11,15 +11,15 @@ import javax.persistence.Table;
 @Entity
 public class RoleEntity extends CoreEntity implements GrantedAuthority {
 
-    @Column(name = "authority")
-    private String authority;
+	@Column(name = "authority")
+	private String authority;
 
-    @Override
-    public String getAuthority() {
-        return authority;
-    }
+	@Override
+	public String getAuthority() {
+		return authority;
+	}
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
 }

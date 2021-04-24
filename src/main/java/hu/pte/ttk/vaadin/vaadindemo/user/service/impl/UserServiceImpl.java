@@ -11,21 +11,21 @@ import javax.persistence.TypedQuery;
 
 @Service
 public class UserServiceImpl extends CoreCRUDServiceImpl<UserEntity> implements UserService {
-    @Override
-    protected void updateCore(UserEntity persistedEntity, UserEntity entity) {
-        persistedEntity.setAuthorities(entity.getAuthorities());
-        persistedEntity.setUsername(entity.getUsername());
-    }
+	@Override
+	protected void updateCore(UserEntity persistedEntity, UserEntity entity) {
+		persistedEntity.setAuthorities(entity.getAuthorities());
+		persistedEntity.setUsername(entity.getUsername());
+	}
 
-    @Override
-    protected Class<UserEntity> getManagedClass() {
-        return UserEntity.class;
-    }
+	@Override
+	protected Class<UserEntity> getManagedClass() {
+		return UserEntity.class;
+	}
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        TypedQuery<UserEntity> query = entityManager.createNamedQuery(UserEntity.FIND_USER_BY_USERNAME, UserEntity.class);
-        query.setParameter("username", username);
-        return query.getSingleResult();
-    }
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		TypedQuery<UserEntity> query = entityManager.createNamedQuery(UserEntity.FIND_USER_BY_USERNAME, UserEntity.class);
+		query.setParameter("username", username);
+		return query.getSingleResult();
+	}
 }

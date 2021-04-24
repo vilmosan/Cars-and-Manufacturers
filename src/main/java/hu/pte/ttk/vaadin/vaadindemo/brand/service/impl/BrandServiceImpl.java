@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class BrandServiceImpl extends CoreCRUDServiceImpl<BrandEntity> implements BrandService {
 
-    @Override
-    protected void updateCore(BrandEntity persistedEntity, BrandEntity entity) {
-        persistedEntity.setBrandName(entity.getBrandName());
-    }
+	@Override
+	protected void updateCore(BrandEntity persistedEntity, BrandEntity entity) {
+		persistedEntity.setBrandName(entity.getBrandName());
+	}
 
-    @Override
-    protected Class<BrandEntity> getManagedClass() {
-        return BrandEntity.class;
-    }
+	@Override
+	protected Class<BrandEntity> getManagedClass() {
+		return BrandEntity.class;
+	}
 }

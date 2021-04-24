@@ -8,9 +8,9 @@ import hu.pte.ttk.vaadin.vaadindemo.menu.MenuComponent;
 @Route
 public class MainView extends VerticalLayout {
 
-    public MainView(){
-        add(new MenuComponent());
-        Text text = new Text("Main Page");
-        add(text);
-    }
+	public MainView() {
+		add(new MenuComponent());
+		Text text = new Text("Main Page");
+		add(text);
+	}
 }

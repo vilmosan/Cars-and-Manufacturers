@@ -12,15 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class AppDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    public AppDaoAuthenticationProvider(){
-        setPasswordEncoder(new BCryptPasswordEncoder());
-    }
+	public AppDaoAuthenticationProvider() {
+		setPasswordEncoder(new BCryptPasswordEncoder());
+	}
 
-    @Autowired
-    public void setUserDetailsService(UserDetailsService userDetailsService){
-        super.setUserDetailsService(userService);
-    }
+	@Autowired
+	public void setUserDetailsService(UserDetailsService userDetailsService) {
+		super.setUserDetailsService(userService);
+	}
 }

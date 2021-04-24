@@ -7,8 +7,8 @@ import hu.pte.ttk.vaadin.vaadindemo.menu.MenuComponent;
 @Route("403")
 public class ForbiddenView extends VerticalLayout {
 
-    public ForbiddenView(){
-        add(new MenuComponent());
-        add("Access Denied!");
-    }
+	public ForbiddenView() {
+		add(new MenuComponent());
+		add("Access Denied!");
+	}
 }
