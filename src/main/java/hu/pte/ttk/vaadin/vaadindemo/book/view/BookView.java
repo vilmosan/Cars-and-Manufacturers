@@ -11,11 +11,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
-import hu.pte.ttk.vaadin.vaadindemo.author.entity.AuthorEntity;
-import hu.pte.ttk.vaadin.vaadindemo.author.service.AuthorService;
+import hu.pte.ttk.vaadin.vaadindemo.brand.entity.AuthorEntity;
+import hu.pte.ttk.vaadin.vaadindemo.brand.service.AuthorService;
 import hu.pte.ttk.vaadin.vaadindemo.book.entity.BookEntity;
 import hu.pte.ttk.vaadin.vaadindemo.book.service.BookService;
-import hu.pte.ttk.vaadin.vaadindemo.book.service.impl.BookServiceImpl;
 import hu.pte.ttk.vaadin.vaadindemo.menu.MenuComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 

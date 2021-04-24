@@ -1,6 +1,6 @@
 package hu.pte.ttk.vaadin.vaadindemo.core.service.impl;
 
-import hu.pte.ttk.vaadin.vaadindemo.author.entity.AuthorEntity;
+import hu.pte.ttk.vaadin.vaadindemo.brand.entity.AuthorEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.entity.CoreEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.service.CoreCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;

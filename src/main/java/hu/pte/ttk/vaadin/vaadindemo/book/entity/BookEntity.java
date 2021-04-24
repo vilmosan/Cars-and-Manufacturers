@@ -1,6 +1,6 @@
 package hu.pte.ttk.vaadin.vaadindemo.book.entity;
 
-import hu.pte.ttk.vaadin.vaadindemo.author.entity.AuthorEntity;
+import hu.pte.ttk.vaadin.vaadindemo.brand.entity.AuthorEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.entity.CoreEntity;
 
 import javax.persistence.*;

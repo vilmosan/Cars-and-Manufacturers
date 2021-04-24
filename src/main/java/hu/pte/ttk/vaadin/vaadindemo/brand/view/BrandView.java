@@ -1,4 +1,4 @@
-package hu.pte.ttk.vaadin.vaadindemo.author.view;
+package hu.pte.ttk.vaadin.vaadindemo.brand.view;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -10,15 +10,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
-import hu.pte.ttk.vaadin.vaadindemo.author.entity.AuthorEntity;
-import hu.pte.ttk.vaadin.vaadindemo.author.service.AuthorService;
+import hu.pte.ttk.vaadin.vaadindemo.brand.entity.AuthorEntity;
+import hu.pte.ttk.vaadin.vaadindemo.brand.service.AuthorService;
 import hu.pte.ttk.vaadin.vaadindemo.menu.MenuComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
 @Route
-public class AuthorView extends VerticalLayout {
+public class BrandView extends VerticalLayout {
 
     private VerticalLayout form;
     private AuthorEntity selectedAuthor;
