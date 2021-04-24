@@ -39,8 +39,8 @@ public class BrandView extends VerticalLayout {
 		add(new Text("This is the page for BRANDS!"));
 
 		Grid<BrandEntity> grid = new Grid<>();
-		grid.addColumn(BrandEntity::getId).setHeader("Id");
-		grid.addColumn(BrandEntity::getBrandName).setHeader("Brand name");
+		grid.addColumn(BrandEntity::getId).setHeader("Id").setSortable(true);;
+		grid.addColumn(BrandEntity::getBrandName).setHeader("Brand name").setSortable(true);;
 		grid.setItems(brandService.getAll());
 		grid.asSingleSelect().addValueChangeListener(event -> {
 			selectedBrand = event.getValue();
