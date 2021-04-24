@@ -1,6 +1,5 @@
 package hu.pte.ttk.vaadin.vaadindemo.core.service.impl;
 
-import hu.pte.ttk.vaadin.vaadindemo.brand.entity.AuthorEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.entity.CoreEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.service.CoreCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ public abstract class CoreCRUDServiceImpl<T extends CoreEntity> implements CoreC
 
     @Override
     public void add(T entity){
+        System.out.println(entity);
         entityManager.persist(entity);
     }
 
@@ -37,8 +37,6 @@ public abstract class CoreCRUDServiceImpl<T extends CoreEntity> implements CoreC
 
     @Override
     public T findById(Long id){
-        /*Optional<AuthorEntity> optional = bookList.stream().filter(entity -> entity.getId().equals(id)).findFirst();
-        return optional.orElse(null);*/
         return entityManager.find(getManagedClass(), id);
     }
 

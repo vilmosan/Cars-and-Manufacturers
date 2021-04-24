@@ -1,14 +1,17 @@
 package hu.pte.ttk.vaadin.vaadindemo.car.view;
 
+import com.sun.jdi.IntegerValue;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
 import hu.pte.ttk.vaadin.vaadindemo.brand.entity.BrandEntity;
@@ -25,13 +28,13 @@ public class CarView extends VerticalLayout {
 
     private VerticalLayout form;
     private CarEntity selectedCar;
-    private Button deleteButton = new Button("Delete", VaadinIcon.TRASH.create());
+    private final Button deleteButton = new Button("Delete", VaadinIcon.TRASH.create());
     private Binder<CarEntity> binder = new Binder<>();
-    private TextField nameField;
+    private TextField carName;
     private ComboBox<BrandEntity> brand;
-    private TextField typeField;
-    private TextField doorsField;
-    private TextField manufacturedField;
+    private TextField carType;
+    private NumberField carDoors;
+    private NumberField carManufactured;
 
     @Autowired
     public CarService carService;
@@ -47,7 +50,7 @@ public class CarView extends VerticalLayout {
         Grid<CarEntity> grid = new Grid<>();
         grid.addColumn(CarEntity::getId).setHeader("Id");
         grid.addColumn(CarEntity::getCarName).setHeader("Name");
-        grid.addColumn(carEntity -> carEntity.getBrandId().getBrandName()).setHeader("Brand");
+        grid.addColumn(carEntity -> carEntity.getBrand().getBrandName()).setHeader("Brand");
         grid.addColumn(CarEntity::getCarType).setHeader("Type");
         grid.addColumn(CarEntity::getCarDoors).setHeader("Doors");
         grid.addColumn(CarEntity::getCarManufactured).setHeader("Manufactured");
@@ -67,34 +70,34 @@ public class CarView extends VerticalLayout {
     private void addForm(Grid<CarEntity> grid) {
         form = new VerticalLayout();
         binder = new Binder<>(CarEntity.class);
-        HorizontalLayout nameLayout = new HorizontalLayout();
-        nameField = new TextField();
-        nameLayout.add(new Text("Name:"), nameField);
-        nameLayout.setPadding(true);
+        HorizontalLayout nameField = new HorizontalLayout();
+        carName = new TextField();
+        nameField.add(new Text("Name:"), carName);
+        nameField.setPadding(true);
 
-        HorizontalLayout brandLayout = new HorizontalLayout();
+        HorizontalLayout brandField = new HorizontalLayout();
         brand = new ComboBox<>();
         brand.setItems(brandService.getAll());
         brand.setItemLabelGenerator(BrandEntity::getBrandName);
-        brandLayout.add(new Text("Brand:"), brand);
-        brandLayout.setPadding(true);
+        brandField.add(new Text("Brand:"), brand);
+        brandField.setPadding(true);
 
-        HorizontalLayout typeLayout = new HorizontalLayout();
-        typeField = new TextField();
-        typeLayout.add(new Text("Type:"), typeField);
-        typeLayout.setPadding(true);
+        HorizontalLayout typeField = new HorizontalLayout();
+        carType = new TextField();
+        typeField.add(new Text("Type:"), carType);
+        typeField.setPadding(true);
 
-        HorizontalLayout doorsLayout = new HorizontalLayout();
-        doorsField = new TextField();
-        doorsLayout.add(new Text("Doors:"), doorsField);
-        doorsLayout.setPadding(true);
+        HorizontalLayout doorsField = new HorizontalLayout();
+        carDoors = new NumberField();
+        doorsField.add(new Text("Doors:"), carDoors);
+        doorsField.setPadding(true);
 
-        HorizontalLayout manufacturedLayout = new HorizontalLayout();
-        manufacturedField = new TextField();
-        manufacturedLayout.add(new Text("Doors:"), manufacturedField);
-        manufacturedLayout.setPadding(true);
+        HorizontalLayout manufacturedField = new HorizontalLayout();
+        carManufactured = new NumberField();
+        manufacturedField.add(new Text("Manufactured:"), carManufactured);
+        manufacturedField.setPadding(true);
 
-        form.add(nameLayout, brandLayout, typeLayout, doorsLayout, manufacturedLayout, addSaveButton(grid));
+        form.add(nameField, brandField, typeField, doorsField, manufacturedField, addSaveButton(grid));
         add(form);
         form.setVisible(false);
 
@@ -132,7 +135,7 @@ public class CarView extends VerticalLayout {
             if(selectedCar.getId() == null){
                 CarEntity carEntity = new CarEntity();
                 carEntity.setCarName(selectedCar.getCarName());
-                carEntity.setBrandId(selectedCar.getBrandId());
+                carEntity.setBrand(selectedCar.getBrand());
                 carEntity.setCarType(selectedCar.getCarType());
                 carEntity.setCarDoors(selectedCar.getCarDoors());
                 carEntity.setCarManufactured(selectedCar.getCarManufactured());

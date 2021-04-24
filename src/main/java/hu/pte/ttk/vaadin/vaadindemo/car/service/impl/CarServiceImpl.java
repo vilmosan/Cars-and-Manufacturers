@@ -10,8 +10,9 @@ public class CarServiceImpl extends CoreCRUDServiceImpl<CarEntity> implements Ca
 
     @Override
     protected void updateCore(CarEntity persistedEntity, CarEntity entity) {
+        System.out.println(entity);
         persistedEntity.setCarName(entity.getCarName());
-        persistedEntity.setBrandId(entity.getBrandId());
+        persistedEntity.setBrand(entity.getBrand());
         persistedEntity.setCarType(entity.getCarType());
         persistedEntity.setCarDoors(entity.getCarDoors());
         persistedEntity.setCarManufactured(entity.getCarManufactured());

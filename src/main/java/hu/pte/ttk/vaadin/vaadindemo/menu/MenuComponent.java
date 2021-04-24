@@ -13,14 +13,14 @@ public class MenuComponent extends HorizontalLayout {
         add(mainLink);
 
         Anchor bookLink = new Anchor();
-        bookLink.setText("Book page");
-        bookLink.setHref("/book");
+        bookLink.setText("List of Cars");
+        bookLink.setHref("/car");
         add(bookLink);
 
         if(SecurityUtils.isAdmin()){
             Anchor authorLink = new Anchor();
-            authorLink.setText("Author page");
-            authorLink.setHref("/author");
+            authorLink.setText("List of Brands");
+            authorLink.setHref("/brand");
             add(authorLink);
         }
     }

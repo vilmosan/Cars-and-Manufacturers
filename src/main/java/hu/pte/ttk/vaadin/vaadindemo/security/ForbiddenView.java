@@ -9,6 +9,6 @@ public class ForbiddenView extends VerticalLayout {
 
     public ForbiddenView(){
         add(new MenuComponent());
-        add("ACess Denied!");
+        add("Access Denied!");
     }
 }

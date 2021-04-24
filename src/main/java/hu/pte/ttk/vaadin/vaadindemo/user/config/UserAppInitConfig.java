@@ -33,8 +33,8 @@ public class UserAppInitConfig {
         List<UserEntity> userEntities = userService.getAll();
         if (userEntities.isEmpty()) {
             UserEntity entity = new UserEntity();
-            entity.setPassword(new BCryptPasswordEncoder().encode("almafa123"));
-            entity.setUsername("admin");
+            entity.setPassword(new BCryptPasswordEncoder().encode("ptettk2021"));
+            entity.setUsername("vaadmin");
             entity.setAuthorities(new ArrayList<>());
             entity.getAuthorities().add(admin);
             userService.add(entity);
