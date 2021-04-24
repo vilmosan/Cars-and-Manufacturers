@@ -10,8 +10,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
-import hu.pte.ttk.vaadin.vaadindemo.brand.entity.AuthorEntity;
-import hu.pte.ttk.vaadin.vaadindemo.brand.service.AuthorService;
+import hu.pte.ttk.vaadin.vaadindemo.brand.entity.BrandEntity;
+import hu.pte.ttk.vaadin.vaadindemo.brand.service.BrandService;
 import hu.pte.ttk.vaadin.vaadindemo.menu.MenuComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,75 +21,66 @@ import javax.annotation.PostConstruct;
 public class BrandView extends VerticalLayout {
 
     private VerticalLayout form;
-    private AuthorEntity selectedAuthor;
+    private BrandEntity selectedBrand;
     private Button deleteButton = new Button("Delete", VaadinIcon.TRASH.create());
-    private Binder<AuthorEntity> binder = new Binder<>();
-    private TextField firstName;
-    private TextField lastName;
+    private Binder<BrandEntity> binder = new Binder<>();
+    private TextField brandName;
 
     @Autowired
-    public AuthorService authorService;
+    public BrandService brandService;
 
     @PostConstruct
     public void init() {
         add(new MenuComponent());
-        add(new Text("Ez a szerzők oldala"));
+        add(new Text("This is the page for BRANDS!"));
 
-        Grid<AuthorEntity> grid = new Grid<>();
-        grid.addColumn(AuthorEntity::getId).setHeader("Id");
-        grid.addColumn(AuthorEntity::getFirstName).setHeader("First name");
-        grid.addColumn(AuthorEntity::getLastName).setHeader("Last name");
-        grid.setItems(authorService.getAll());
+        Grid<BrandEntity> grid = new Grid<>();
+        grid.addColumn(BrandEntity::getId).setHeader("Id");
+        grid.addColumn(BrandEntity::getBrandName).setHeader("Brand name");
+        grid.setItems(brandService.getAll());
         grid.asSingleSelect().addValueChangeListener(event -> {
-            selectedAuthor = event.getValue();
-            binder.setBean(selectedAuthor);
-            form.setVisible(selectedAuthor != null);
-            deleteButton.setEnabled(selectedAuthor != null);
+            selectedBrand = event.getValue();
+            binder.setBean(selectedBrand);
+            form.setVisible(selectedBrand != null);
+            deleteButton.setEnabled(selectedBrand != null);
         });
 
         addButtonBar(grid);
-
         add(grid);
-
         addForm(grid);
     }
 
-    private void addForm(Grid<AuthorEntity> grid) {
+    private void addForm(Grid<BrandEntity> grid) {
         form = new VerticalLayout();
-        binder = new Binder<>(AuthorEntity.class);
+        binder = new Binder<>(BrandEntity.class);
         HorizontalLayout nameField = new HorizontalLayout();
-        firstName = new TextField();
-        nameField.add(new Text("First name:"), firstName);
+        brandName = new TextField();
+        nameField.add(new Text("Brand name:"), brandName);
         nameField.setPadding(true);
 
-        HorizontalLayout authorField = new HorizontalLayout();
-        lastName = new TextField();
-        authorField.add(new Text("Last name:"), lastName);
-        authorField.setPadding(true);
-
-        form.add(nameField, authorField, addSaveButton(grid));
+        form.add(nameField, addSaveButton(grid));
         add(form);
         form.setVisible(false);
 
         binder.bindInstanceFields(this);
     }
 
-    private void addButtonBar(Grid<AuthorEntity> grid) {
+    private void addButtonBar(Grid<BrandEntity> grid) {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         //deleteButton.setDisableOnClick(true);
         deleteButton.addClickListener(buttonClickEvent -> {
-            authorService.remove(selectedAuthor);
-            Notification.show("Sikeres törlés");
-            selectedAuthor = null;
-            grid.setItems(authorService.getAll());
+            brandService.remove(selectedBrand);
+            Notification.show("Deleted.");
+            selectedBrand = null;
+            grid.setItems(brandService.getAll());
             form.setVisible(false);
         });
         deleteButton.setEnabled(false);
 
         Button addButton = new Button("Add", VaadinIcon.PLUS.create());
         addButton.addClickListener(buttonClickEvent -> {
-            selectedAuthor = new AuthorEntity();
-            binder.setBean(selectedAuthor);
+            selectedBrand = new BrandEntity();
+            binder.setBean(selectedBrand);
             form.setVisible(true);
         });
 
@@ -99,23 +90,22 @@ public class BrandView extends VerticalLayout {
     }
 
 
-    private Button addSaveButton(Grid<AuthorEntity> grid){
+    private Button addSaveButton(Grid<BrandEntity> grid){
         Button saveButton = new Button("Save", VaadinIcon.SAFE.create());
         saveButton.addClickListener(buttonClickEvent -> {
-            if(selectedAuthor.getId() == null){
-                AuthorEntity authorEntity = new AuthorEntity();
-                authorEntity.setFirstName(selectedAuthor.getFirstName());
-                authorEntity.setLastName(selectedAuthor.getLastName());
+            if(selectedBrand.getId() == null){
+                BrandEntity brandEntity = new BrandEntity();
+                brandEntity.setBrandName(selectedBrand.getBrandName());
 
-                authorService.add(authorEntity);
-                grid.setItems(authorService.getAll());
-                selectedAuthor = null;
-                Notification.show("Sikeres mentés.");
+                brandService.add(brandEntity);
+                grid.setItems(brandService.getAll());
+                selectedBrand = null;
+                Notification.show("Saved.");
             }
             else{
-                authorService.update(selectedAuthor);
-                grid.setItems(authorService.getAll());
-                Notification.show("Sikeres módosítás.");
+                brandService.update(selectedBrand);
+                grid.setItems(brandService.getAll());
+                Notification.show("Modified.");
             }
             form.setVisible(false);
         });

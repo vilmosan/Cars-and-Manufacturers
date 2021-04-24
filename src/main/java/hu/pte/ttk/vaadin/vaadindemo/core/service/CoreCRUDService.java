@@ -1,6 +1,5 @@
 package hu.pte.ttk.vaadin.vaadindemo.core.service;
 
-import hu.pte.ttk.vaadin.vaadindemo.book.entity.BookEntity;
 import hu.pte.ttk.vaadin.vaadindemo.core.entity.CoreEntity;
 import org.springframework.transaction.annotation.Transactional;
 
