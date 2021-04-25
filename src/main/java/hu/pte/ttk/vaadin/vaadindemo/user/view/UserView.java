@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
+import java.util.List;
 
 // http://localhost:8080/user
 @Route
@@ -34,10 +35,12 @@ public class UserView extends VerticalLayout {
 	private TextField username;
 	private PasswordField password;
 	private ComboBox<RoleEntity> comboBox;
+//	private MultiselectComboBox<RoleEntity> comboBox;
+
 	private final Button deleteBtn = new Button("Delete", VaadinIcon.TRASH.create());
 
 	@Autowired
-	private UserService service;
+	private UserService userService;
 	@Autowired
 	private RoleService roleService;
 
@@ -46,7 +49,7 @@ public class UserView extends VerticalLayout {
 		add(new MenuComponent());
 		add(new Text("This is the page for USERS"));
 		Grid<UserEntity> grid = new Grid<>();
-		grid.setItems(service.getAll());
+		grid.setItems(userService.getAll());
 		grid.addColumn(UserEntity::getId).setHeader("Id");
 		grid.addColumn(UserEntity::getFirstName).setHeader("First name");
 		grid.addColumn(UserEntity::getLastName).setHeader("Last name");
@@ -101,7 +104,16 @@ public class UserView extends VerticalLayout {
 		HorizontalLayout authorityField = new HorizontalLayout();
 		comboBox = new ComboBox<>();
 		comboBox.setItems(roleService.getAll());
-		comboBox.setItemLabelGenerator(authorEntity -> authorEntity.getAuthority());
+		comboBox.setItemLabelGenerator(RoleEntity::getAuthority);
+		authorityField.add(new Text("Authorities"), comboBox);
+		authorityField.setPadding(true);
+//		List<RoleEntity> roleEntities = roleService.getAll();
+//		comboBox = new MultiselectComboBox<>();
+//		comboBox.setWidth("100%");
+//		comboBox.setPlaceholder("Select authorities...");
+//		if (!roleEntities.isEmpty()){
+//			comboBox.setItems(roleEntities);
+//		}
 		authorityField.add(new Text("Authorities"), comboBox);
 		authorityField.setPadding(true);
 
@@ -114,24 +126,31 @@ public class UserView extends VerticalLayout {
 	private Button addSaveBtn(Grid<UserEntity> grid) {
 		Button saveBtn = new Button("Save", VaadinIcon.SAFE.create());
 		saveBtn.addClickListener(buttonClickEvent -> {
-			//mentés
-			if (selectedUser.getId() == null) {
-				UserEntity userEntity = new UserEntity();
-				userEntity.setFirstName(selectedUser.getFirstName());
-				userEntity.setLastName(selectedUser.getLastName());
-				userEntity.setUsername(selectedUser.getUsername());
-				userEntity.setAuthorities(Collections.singletonList(comboBox.getValue()));
-				userEntity.setPassword(new BCryptPasswordEncoder().encode(selectedUser.getPassword()));
-				service.add(userEntity);
-				grid.setItems(service.getAll());
-				selectedUser = null;
-				Notification.show("Saved.");
+			boolean selectedNameAvailable = isNameAvailable(selectedUser.getUsername());
+			boolean paramsNotNull = isParamsNotNull(selectedUser);
+
+			if (selectedNameAvailable && paramsNotNull) {
+				if (selectedUser.getId() == null) {
+					UserEntity userEntity = new UserEntity();
+					userEntity.setFirstName(selectedUser.getFirstName());
+					userEntity.setLastName(selectedUser.getLastName());
+					userEntity.setUsername(selectedUser.getUsername());
+					userEntity.setAuthorities(Collections.singletonList(comboBox.getValue()));
+					userEntity.setPassword(new BCryptPasswordEncoder().encode(selectedUser.getPassword()));
+					userService.add(userEntity);
+					grid.setItems(userService.getAll());
+					selectedUser = null;
+					Notification.show("Saved.");
+				} else {
+					userService.update(selectedUser);
+					grid.setItems(userService.getAll());
+					Notification.show("Modified.");
+				}
+				form.setVisible(false);
 			} else {
-				service.update(selectedUser);
-				grid.setItems(service.getAll());
-				Notification.show("Modified.");
+				if (!selectedNameAvailable) Notification.show("Username already taken. Choose a different name!");
+				if (!paramsNotNull) Notification.show("Some input parameters are empty. Please fill the fields!!");
 			}
-			form.setVisible(false);
 		});
 		return saveBtn;
 
@@ -140,10 +159,10 @@ public class UserView extends VerticalLayout {
 	private void addButtonBar(Grid<UserEntity> grid) {
 		HorizontalLayout horizontalLayout = new HorizontalLayout();
 		deleteBtn.addClickListener(buttonClickEvent -> {
-			service.remove(selectedUser);
+			userService.remove(selectedUser);
 			Notification.show("Deleted.");
 			selectedUser = null;
-			grid.setItems(service.getAll());
+			grid.setItems(userService.getAll());
 			form.setVisible(false);
 
 		});
@@ -159,6 +178,24 @@ public class UserView extends VerticalLayout {
 		horizontalLayout.add(deleteBtn);
 		horizontalLayout.add(addBtn);
 		add(horizontalLayout);
+	}
+
+	private boolean isNameAvailable(String chosenName) {
+		List<UserEntity> userEntities = userService.getAll();
+
+		for (UserEntity userEntity : userEntities) {
+			if (userEntity.getUsername().equals(chosenName)) return false;
+		}
+
+		return true;
+	}
+
+	private boolean isParamsNotNull(UserEntity selectedUser) {
+		if (selectedUser != null) {
+			return !selectedUser.getFirstName().equals("") && !selectedUser.getLastName().equals("") && !selectedUser.getUsername().equals("") && !selectedUser.getPassword().equals("");
+		}
+
+		return true;
 	}
 }
 
