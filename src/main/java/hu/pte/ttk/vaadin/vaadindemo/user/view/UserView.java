@@ -11,7 +11,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import hu.pte.ttk.vaadin.vaadindemo.car.entity.CarEntity;
 import hu.pte.ttk.vaadin.vaadindemo.menu.MenuComponent;
 import hu.pte.ttk.vaadin.vaadindemo.user.entity.RoleEntity;
 import hu.pte.ttk.vaadin.vaadindemo.user.entity.UserEntity;
@@ -37,6 +39,8 @@ public class UserView extends VerticalLayout {
 	private ComboBox<RoleEntity> comboBox;
 //	private MultiselectComboBox<RoleEntity> comboBox;
 
+	private TextField filterNameField = new TextField();
+
 	private final Button deleteBtn = new Button("Delete", VaadinIcon.TRASH.create());
 
 	@Autowired
@@ -50,10 +54,10 @@ public class UserView extends VerticalLayout {
 		add(new Text("This is the page for USERS"));
 		Grid<UserEntity> grid = new Grid<>();
 		grid.setItems(userService.getAll());
-		grid.addColumn(UserEntity::getId).setHeader("Id");
-		grid.addColumn(UserEntity::getFirstName).setHeader("First name");
-		grid.addColumn(UserEntity::getLastName).setHeader("Last name");
-		grid.addColumn(UserEntity::getUsername).setHeader("Username");
+		grid.addColumn(UserEntity::getId).setHeader("Id").setSortable(true);
+		grid.addColumn(UserEntity::getFirstName).setHeader("First name").setSortable(true);
+		grid.addColumn(UserEntity::getLastName).setHeader("Last name").setSortable(true);
+		grid.addColumn(UserEntity::getUsername).setHeader("Username").setSortable(true);
 		grid.addColumn(userEntity -> {
 					if (userEntity.getAuthorities() != null) {
 						StringBuilder builder = new StringBuilder();
@@ -64,7 +68,7 @@ public class UserView extends VerticalLayout {
 					}
 					return "";
 				}
-		).setHeader("Authority");
+		).setHeader("Authority").setSortable(true);
 		grid.asSingleSelect().addValueChangeListener(event -> {
 			selectedUser = event.getValue();
 			binder.setBean(selectedUser);
@@ -72,9 +76,32 @@ public class UserView extends VerticalLayout {
 			deleteBtn.setEnabled(selectedUser != null);
 
 		});
+
+		configureFilter(grid);
+
+		grid.asSingleSelect().addValueChangeListener(event -> {
+			selectedUser = event.getValue();
+			binder.setBean(selectedUser);
+			form.setVisible(selectedUser != null);
+			deleteBtn.setEnabled(selectedUser != null);
+		});
 		addButtonBar(grid);
-		add(grid);
+		add(filterNameField, grid);
 		addForm(grid);
+	}
+
+	private void configureFilter(Grid<UserEntity> grid) {
+		filterNameField.setPlaceholder("Filter by username...");
+		filterNameField.setClearButtonVisible(true);
+		filterNameField.setValueChangeMode(ValueChangeMode.ON_CHANGE);
+		filterNameField.addValueChangeListener(e -> {
+					if (filterNameField.getValue().isEmpty()) {
+						grid.setItems(userService.getAll());
+					} else {
+						grid.setItems(userService.findAllByUsername(filterNameField.getValue()));
+					}
+				}
+		);
 	}
 
 	private void addForm(Grid<UserEntity> grid) {
