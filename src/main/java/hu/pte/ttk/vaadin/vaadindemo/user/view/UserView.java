@@ -61,7 +61,7 @@ public class UserView extends VerticalLayout {
 					}
 					return "";
 				}
-		).setHeader("Author");
+		).setHeader("Authority");
 		grid.asSingleSelect().addValueChangeListener(event -> {
 			selectedUser = event.getValue();
 			binder.setBean(selectedUser);
@@ -81,26 +81,31 @@ public class UserView extends VerticalLayout {
 		HorizontalLayout firstNameField = new HorizontalLayout();
 		firstName = new TextField();
 		firstNameField.add(new Text("First name"), firstName);
+		firstNameField.setPadding(true);
 
 		HorizontalLayout lastNameField = new HorizontalLayout();
 		lastName = new TextField();
 		lastNameField.add(new Text("Last name"), lastName);
+		lastNameField.setPadding(true);
 
 		HorizontalLayout nameField = new HorizontalLayout();
 		username = new TextField();
 		nameField.add(new Text("Username"), username);
+		nameField.setPadding(true);
 
 		HorizontalLayout passwordField = new HorizontalLayout();
 		password = new PasswordField();
 		passwordField.add(new Text("Password"), password);
+		passwordField.setPadding(true);
 
-		HorizontalLayout authorField = new HorizontalLayout();
+		HorizontalLayout authorityField = new HorizontalLayout();
 		comboBox = new ComboBox<>();
 		comboBox.setItems(roleService.getAll());
 		comboBox.setItemLabelGenerator(authorEntity -> authorEntity.getAuthority());
-		authorField.add(new Text("Authorities"), comboBox);
+		authorityField.add(new Text("Authorities"), comboBox);
+		authorityField.setPadding(true);
 
-		form.add(nameField, authorField, passwordField, addSaveBtn(grid));
+		form.add(firstNameField, lastNameField, nameField, authorityField, passwordField, addSaveBtn(grid));
 		add(form);
 		form.setVisible(false);
 		binder.bindInstanceFields(this);
@@ -111,13 +116,13 @@ public class UserView extends VerticalLayout {
 		saveBtn.addClickListener(buttonClickEvent -> {
 			//mentés
 			if (selectedUser.getId() == null) {
-				UserEntity bookEntity = new UserEntity();
-				bookEntity.setUsername(selectedUser.getFirstName());
-				bookEntity.setUsername(selectedUser.getLastName());
-				bookEntity.setUsername(selectedUser.getUsername());
-				bookEntity.setAuthorities(Collections.singletonList(comboBox.getValue()));
-				bookEntity.setPassword(new BCryptPasswordEncoder().encode(selectedUser.getPassword()));
-				service.add(bookEntity);
+				UserEntity userEntity = new UserEntity();
+				userEntity.setFirstName(selectedUser.getFirstName());
+				userEntity.setLastName(selectedUser.getLastName());
+				userEntity.setUsername(selectedUser.getUsername());
+				userEntity.setAuthorities(Collections.singletonList(comboBox.getValue()));
+				userEntity.setPassword(new BCryptPasswordEncoder().encode(selectedUser.getPassword()));
+				service.add(userEntity);
 				grid.setItems(service.getAll());
 				selectedUser = null;
 				Notification.show("Saved.");

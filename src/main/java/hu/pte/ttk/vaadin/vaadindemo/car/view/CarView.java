@@ -88,6 +88,7 @@ public class CarView extends VerticalLayout {
 	private void addForm(Grid<CarEntity> grid) {
 		form = new VerticalLayout();
 		binder = new Binder<>(CarEntity.class);
+
 		HorizontalLayout nameField = new HorizontalLayout();
 		carName = new TextField();
 		nameField.add(new Text("Name:"), carName);
