@@ -111,29 +111,24 @@ public class UserView extends VerticalLayout {
 		HorizontalLayout firstNameField = new HorizontalLayout();
 		firstName = new TextField();
 		firstNameField.add(new Text("First name"), firstName);
-		firstNameField.setPadding(true);
 
 		HorizontalLayout lastNameField = new HorizontalLayout();
 		lastName = new TextField();
 		lastNameField.add(new Text("Last name"), lastName);
-		lastNameField.setPadding(true);
 
 		HorizontalLayout nameField = new HorizontalLayout();
 		username = new TextField();
 		nameField.add(new Text("Username"), username);
-		nameField.setPadding(true);
 
 		HorizontalLayout passwordField = new HorizontalLayout();
 		password = new PasswordField();
 		passwordField.add(new Text("Password"), password);
-		passwordField.setPadding(true);
 
 		HorizontalLayout authorityField = new HorizontalLayout();
 		comboBox = new ComboBox<>();
 		comboBox.setItems(roleService.getAll());
 		comboBox.setItemLabelGenerator(RoleEntity::getAuthority);
 		authorityField.add(new Text("Authorities"), comboBox);
-		authorityField.setPadding(true);
 //		List<RoleEntity> roleEntities = roleService.getAll();
 //		comboBox = new MultiselectComboBox<>();
 //		comboBox.setWidth("100%");
@@ -142,7 +137,6 @@ public class UserView extends VerticalLayout {
 //			comboBox.setItems(roleEntities);
 //		}
 		authorityField.add(new Text("Authorities"), comboBox);
-		authorityField.setPadding(true);
 
 		form.add(firstNameField, lastNameField, nameField, authorityField, passwordField, addSaveBtn(grid));
 		add(form);
@@ -166,8 +160,10 @@ public class UserView extends VerticalLayout {
 					userEntity.setPassword(new BCryptPasswordEncoder().encode(selectedUser.getPassword()));
 					userService.add(userEntity);
 					grid.setItems(userService.getAll());
+					Notification notification = new Notification(
+							"Saved. You can now login with the username of '" + selectedUser.getUsername() + "' and the password of '" + selectedUser.getPassword() + "'.", 10000, Notification.Position.BOTTOM_STRETCH);
+					notification.open();
 					selectedUser = null;
-					Notification.show("Saved.");
 				} else {
 					userService.update(selectedUser);
 					grid.setItems(userService.getAll());

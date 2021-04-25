@@ -76,7 +76,6 @@ public class BrandView extends VerticalLayout {
 		HorizontalLayout nameField = new HorizontalLayout();
 		brandName = new TextField();
 		nameField.add(new Text("Brand name:"), brandName);
-		nameField.setPadding(true);
 
 		form.add(nameField, addSaveButton(grid));
 		add(form);

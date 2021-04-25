@@ -9,6 +9,7 @@ import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -34,7 +35,7 @@ public class CarView extends VerticalLayout {
 	private ComboBox<BrandEntity> brand;
 	private TextField carType;
 	private ListBox<Integer> carDoors;
-	private NumberField carManufactured;
+	private IntegerField carManufactured;
 
 	private TextField filterNameField = new TextField();
 
@@ -92,30 +93,25 @@ public class CarView extends VerticalLayout {
 		HorizontalLayout nameField = new HorizontalLayout();
 		carName = new TextField();
 		nameField.add(new Text("Name:"), carName);
-		nameField.setPadding(true);
 
 		HorizontalLayout brandField = new HorizontalLayout();
 		brand = new ComboBox<>();
 		brand.setItems(brandService.getAll());
 		brand.setItemLabelGenerator(BrandEntity::getBrandName);
 		brandField.add(new Text("Brand:"), brand);
-		brandField.setPadding(true);
 
 		HorizontalLayout typeField = new HorizontalLayout();
 		carType = new TextField();
 		typeField.add(new Text("Type:"), carType);
-		typeField.setPadding(true);
 
 		HorizontalLayout doorsField = new HorizontalLayout();
 		carDoors = new ListBox<>();
 		carDoors.setItems(2, 3, 4, 5);
 		doorsField.add(new Text("Doors:"), carDoors);
-		doorsField.setPadding(true);
 
 		HorizontalLayout manufacturedField = new HorizontalLayout();
-		carManufactured = new NumberField();
+		carManufactured = new IntegerField();
 		manufacturedField.add(new Text("Manufactured:"), carManufactured);
-		manufacturedField.setPadding(true);
 
 		form.add(nameField, brandField, typeField, doorsField, manufacturedField, addSaveButton(grid));
 		add(form);

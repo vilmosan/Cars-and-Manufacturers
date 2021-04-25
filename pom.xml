@@ -14,7 +14,7 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
-        <vaadin.version>13.0.13</vaadin.version>
+        <vaadin.version>14.5.3</vaadin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -69,6 +69,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-core</artifactId>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <build>

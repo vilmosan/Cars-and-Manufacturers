@@ -29,6 +29,6 @@ public class CarEntity extends CoreEntity {
 	private Integer carDoors;
 
 	@Column(name = "car_manufactured")
-	private Double carManufactured;
+	private Integer carManufactured;
 
 }
