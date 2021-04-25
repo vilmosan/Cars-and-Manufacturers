@@ -10,7 +10,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String LOGIN_PROCESSING_URL = "/login";
 	private static final String LOGIN_FAILURE_URL = "/login";
 	private static final String LOGIN_URL = "/login";
-	private static final String LOGOUT_SUCCESS_URL = "/login";
 	private static final String LOGIN_SUCCESS_URL = "/";
 
 	@Override
@@ -35,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.failureUrl(LOGIN_FAILURE_URL)
 
 				// Configure logout
-				.and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
+				.and().logout().invalidateHttpSession(true).deleteCookies("JSESSIONID").clearAuthentication(true);
 	}
 
 	/**

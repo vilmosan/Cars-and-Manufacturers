@@ -12,16 +12,26 @@ public class MenuComponent extends HorizontalLayout {
 		mainLink.setHref("/");
 		add(mainLink);
 
-		Anchor bookLink = new Anchor();
-		bookLink.setText("List of Cars");
-		bookLink.setHref("/car");
-		add(bookLink);
+		Anchor carLink = new Anchor();
+		carLink.setText("List of Cars");
+		carLink.setHref("/car");
+		add(carLink);
+
+		Anchor brandLink = new Anchor();
+		brandLink.setText("List of Brands");
+		brandLink.setHref("/brand");
+		add(brandLink);
 
 		if (SecurityUtils.isAdmin()) {
-			Anchor authorLink = new Anchor();
-			authorLink.setText("List of Brands");
-			authorLink.setHref("/brand");
-			add(authorLink);
+			Anchor userLink = new Anchor();
+			userLink.setText("List of Users");
+			userLink.setHref("/user");
+			add(userLink);
 		}
+
+		Anchor logoutLink = new Anchor();
+		logoutLink.setText("Log Out");
+		logoutLink.setHref("/logout");
+		add(logoutLink);
 	}
 }

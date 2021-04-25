@@ -23,21 +23,35 @@ public class UserAppInitConfig {
 	@PostConstruct
 	private void init() {
 		List<RoleEntity> roleEntities = roleService.getAll();
-		RoleEntity admin = new RoleEntity();
-		if (roleEntities.isEmpty()) {
-			admin.setAuthority("ROLE_ADMIN");
-			roleService.add(admin);
+		RoleEntity adminRole = new RoleEntity();
+		RoleEntity userRole = new RoleEntity();
 
+		if (roleEntities.isEmpty()) {
+			adminRole.setAuthority("ROLE_ADMIN");
+			roleService.add(adminRole);
+			userRole.setAuthority("ROLE_USER");
+			roleService.add(userRole);
 		}
 
 		List<UserEntity> userEntities = userService.getAll();
 		if (userEntities.isEmpty()) {
-			UserEntity entity = new UserEntity();
-			entity.setPassword(new BCryptPasswordEncoder().encode("ptettk2021"));
-			entity.setUsername("vaadmin");
-			entity.setAuthorities(new ArrayList<>());
-			entity.getAuthorities().add(admin);
-			userService.add(entity);
+			UserEntity adminEntity = new UserEntity();
+			adminEntity.setPassword(new BCryptPasswordEncoder().encode("PTEadmin1367"));
+			adminEntity.setFirstName("Vaadin");
+			adminEntity.setLastName("Admin");
+			adminEntity.setUsername("vaadmin");
+			adminEntity.setAuthorities(new ArrayList<>());
+			adminEntity.getAuthorities().add(adminRole);
+			userService.add(adminEntity);
+
+			UserEntity userEntity = new UserEntity();
+			userEntity.setPassword(new BCryptPasswordEncoder().encode("PTEuser1367"));
+			userEntity.setFirstName("Vaadin");
+			userEntity.setLastName("User");
+			userEntity.setUsername("vaaduser");
+			userEntity.setAuthorities(new ArrayList<>());
+			userEntity.getAuthorities().add(userRole);
+			userService.add(userEntity);
 
 		}
 	}

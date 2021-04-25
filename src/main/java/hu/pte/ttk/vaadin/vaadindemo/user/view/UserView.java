@@ -29,6 +29,8 @@ public class UserView extends VerticalLayout {
 	private VerticalLayout form;
 	private UserEntity selectedUser;
 	private Binder<UserEntity> binder;
+	private TextField firstName;
+	private TextField lastName;
 	private TextField username;
 	private PasswordField password;
 	private ComboBox<RoleEntity> comboBox;
@@ -42,10 +44,12 @@ public class UserView extends VerticalLayout {
 	@PostConstruct
 	public void init() {
 		add(new MenuComponent());
-		add(new Text("A felhasználók oldala"));
+		add(new Text("This is the page for USERS"));
 		Grid<UserEntity> grid = new Grid<>();
 		grid.setItems(service.getAll());
 		grid.addColumn(UserEntity::getId).setHeader("Id");
+		grid.addColumn(UserEntity::getFirstName).setHeader("First name");
+		grid.addColumn(UserEntity::getLastName).setHeader("Last name");
 		grid.addColumn(UserEntity::getUsername).setHeader("Username");
 		grid.addColumn(userEntity -> {
 					if (userEntity.getAuthorities() != null) {
@@ -74,6 +78,14 @@ public class UserView extends VerticalLayout {
 		form = new VerticalLayout();
 		binder = new Binder<>(UserEntity.class);
 
+		HorizontalLayout firstNameField = new HorizontalLayout();
+		firstName = new TextField();
+		firstNameField.add(new Text("First name"), firstName);
+
+		HorizontalLayout lastNameField = new HorizontalLayout();
+		lastName = new TextField();
+		lastNameField.add(new Text("Last name"), lastName);
+
 		HorizontalLayout nameField = new HorizontalLayout();
 		username = new TextField();
 		nameField.add(new Text("Username"), username);
@@ -100,17 +112,19 @@ public class UserView extends VerticalLayout {
 			//mentés
 			if (selectedUser.getId() == null) {
 				UserEntity bookEntity = new UserEntity();
+				bookEntity.setUsername(selectedUser.getFirstName());
+				bookEntity.setUsername(selectedUser.getLastName());
 				bookEntity.setUsername(selectedUser.getUsername());
 				bookEntity.setAuthorities(Collections.singletonList(comboBox.getValue()));
 				bookEntity.setPassword(new BCryptPasswordEncoder().encode(selectedUser.getPassword()));
 				service.add(bookEntity);
 				grid.setItems(service.getAll());
 				selectedUser = null;
-				Notification.show("Sikeres mentés");
+				Notification.show("Saved.");
 			} else {
 				service.update(selectedUser);
 				grid.setItems(service.getAll());
-				Notification.show("Sikeres módosítás");
+				Notification.show("Modified.");
 			}
 			form.setVisible(false);
 		});
@@ -122,7 +136,7 @@ public class UserView extends VerticalLayout {
 		HorizontalLayout horizontalLayout = new HorizontalLayout();
 		deleteBtn.addClickListener(buttonClickEvent -> {
 			service.remove(selectedUser);
-			Notification.show("Sikeres törlés");
+			Notification.show("Deleted.");
 			selectedUser = null;
 			grid.setItems(service.getAll());
 			form.setVisible(false);
