@@ -52,8 +52,8 @@ public class CarView extends VerticalLayout {
 
 		Grid<CarEntity> grid = new Grid<>();
 		grid.addColumn(CarEntity::getId).setHeader("Id").setSortable(true);
-		grid.addColumn(CarEntity::getCarName).setHeader("Name").setSortable(true);
 		grid.addColumn(carEntity -> carEntity.getBrand().getBrandName()).setHeader("Brand").setSortable(true);
+		grid.addColumn(CarEntity::getCarName).setHeader("Name").setSortable(true);
 		grid.addColumn(CarEntity::getCarType).setHeader("Type").setSortable(true);
 		grid.addColumn(CarEntity::getCarDoors).setHeader("Doors").setSortable(true);
 		grid.addColumn(CarEntity::getCarManufactured).setHeader("Manufactured").setSortable(true);
